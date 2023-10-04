@@ -20,6 +20,7 @@ function playRound(playerSelection, computerSelection) {
         roundResult = "You Lose! " + computerSelection + " beats " + playerSelection;
     }
 
+    results.textContent = roundResult;
     return roundResult;
 }
 
@@ -30,36 +31,43 @@ function capitalizeFirstLetter(string) {
 }
 
 function game() {
-    const ROUNDS = 5;
     let playerScore = 0;
     let computerScore = 0;
 
-    for (let i = 0; i < ROUNDS; i++) {
-        let playerSelection = prompt("Rock, Paper, or Scissors?")
-        let computerSelection = getComputerChoice();
-        console.log(computerSelection);
-        let roundResult = playRound(playerSelection, computerSelection);
-        if (roundResult.slice(0, 7) == "You Win") {
-            playerScore++;
-        }
-        else if (roundResult.slice(0, 8) == "You Lose") {
-            computerScore++;
-        }
-        console.log(roundResult);
+    const buttons = document.querySelectorAll('button');
 
-    }
+    buttons.forEach((button) => {
 
-    if (playerScore > computerScore) {
-        gameResult = "Player Wins! Score " + playerScore + " to " + computerScore;
-    }
-    else if (playerScore == computerScore) {
-        gameResult = "Tie"
+        button.addEventListener('click', () => {
+            let roundResult = playRound(button.id, getComputerChoice());
+            if (roundResult.slice(0, 7) == "You Win") {
+                playerScore++;
+            }
+            else if (roundResult.slice(0, 8) == "You Lose") {
+                computerScore++;
+            }
+            if (computerScore >= 5 || playerScore >= 5) {
+                if (playerScore > computerScore) {
+                    gameResult = "Player wins the game!";
+                }
+                else if (playerScore == computerScore) {
+                    gameResult = "Tie game!"
 
-    }
-    else {
-        gameResult = "You lose the game!"
-    }
+                }
+                else {
+                    gameResult = "You lose the game!"
+                }
+
+                results.textContent = gameResult;
+            }
+            score.textContent = "Player: " + playerScore + " Computer: " + computerScore;
+
+        });
+    });
+
+
+
     return gameResult;
 }
 
-console.log(game());
+game();
